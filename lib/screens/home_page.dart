@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:poke_dex/models/pokemon.dart';
 import 'package:poke_dex/screens/detail_page.dart';
@@ -13,14 +14,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   List<Pokemon> pokeList;
   PokemonService pokemonService;
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
-
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   void getPokemons() async {
-    pokemonService  = PokemonService();
+    pokemonService = PokemonService();
     pokeList = await pokemonService.getRandomPokemon();
     setState(() {});
   }
@@ -38,13 +38,10 @@ class _HomePageState extends State<HomePage> {
     _refreshIndicatorKey.currentState?.show(atTop: false);
     getPokemons();
     await Future.delayed(Duration(seconds: 2)); // coz users
-    setState(() {
-
-    });
+    setState(() {});
 
     return null;
   }
-
 
   @override
   void initState() {
@@ -57,25 +54,30 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-          onTap: (){
-            showAboutDialog(context: context ,
-                applicationName: 'Pokedex' ,
-                applicationVersion: '1.0.0' ,
+          onTap: () {
+            showAboutDialog(
+                context: context,
+                applicationName: 'Pokedex',
+                applicationVersion: '1.0.0',
                 applicationIcon: Image.asset('assets/pokedex.png'),
-                applicationLegalese: 'App by @kriticalflare  \n\nUses icons from icons8.com',
-            children:[
-             Padding(
-               padding: EdgeInsets.only(top: 30),
-               child: Center(
-                 child: GestureDetector(
-                   onTap: (){
-                     _launchURL();
-                   },
-                     child: Image.asset('assets/github.png' , height: 70, width: 70,)
-                 ),
-               ),
-             )
-            ] );
+                applicationLegalese:
+                    'App by @kriticalflare  \n\nUses icons from icons8.com',
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 30),
+                    child: Center(
+                      child: GestureDetector(
+                          onTap: () {
+                            _launchURL();
+                          },
+                          child: Image.asset(
+                            'assets/github.png',
+                            height: 70,
+                            width: 70,
+                          )),
+                    ),
+                  )
+                ]);
           },
           child: Text(
             'Pokedex',
@@ -88,7 +90,7 @@ class _HomePageState extends State<HomePage> {
               Icons.search,
               color: Colors.black,
             ),
-            onPressed: (){
+            onPressed: () {
               showSearch(context: context, delegate: PokemonSearch());
             },
           )
@@ -101,68 +103,87 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           child: pokeList == null
               ? Center(
-                  child:  Image.asset('assets/loading.gif', height: 200,width: 200,),
+                  child: Image.asset(
+                    'assets/loading.gif',
+                    height: 200,
+                    width: 200,
+                  ),
                 )
-              : Column(
-            children: <Widget>[
-              Expanded(
-                child: Center(
-                  child: Text(
-                    'Pokemon of the day',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30.0,
-                    ),
+              : SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Flexible(
+                        child: Center(
+                          child: Text(
+                            'Pokemon of the day',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      RefreshIndicator(
+                        key: _refreshIndicatorKey,
+                        onRefresh: refreshList,
+                        child: GridView.builder(
+                            padding: EdgeInsets.all(10.0),
+                            shrinkWrap: true,
+                            itemCount: pokeList.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    mainAxisSpacing: 10.0,
+                                    crossAxisSpacing: 10.0,
+                                    crossAxisCount: 2),
+                            itemBuilder: (context, position) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return DetailsPage(
+                                      pokemon: pokeList[position],
+                                    );
+                                  }));
+                                },
+                                child: Expanded(
+                                  child: Container(
+                                      padding: EdgeInsets.all(15.0),
+                                      decoration: BoxDecoration(
+                                          color: ColorUtil.getColor(
+                                              pokeList[position].type[0]),
+                                          borderRadius:
+                                              BorderRadius.circular(30.0)),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Hero(
+                                            tag: pokeList[position].id,
+                                            child: Image.network(
+                                              pokeList[position].image,
+                                              height: 110.0,
+                                              width: 110.0,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10.0,
+                                          ),
+                                          Text(pokeList[position].name.english),
+                                        ],
+                                      )),
+                                ),
+                              );
+                            }),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              RefreshIndicator(
-                key: _refreshIndicatorKey,
-                onRefresh: refreshList,
-                child: GridView.builder(
-                  padding: EdgeInsets.all(10.0),
-                  shrinkWrap: true,
-                    itemCount: pokeList.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
-                        crossAxisCount: 2),
-                    itemBuilder: (context, position) {
-                      return GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context){
-                              return DetailsPage(pokemon: pokeList[position],);
-                            }
-                          ));
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(15.0),
-                          decoration: BoxDecoration(
-                            color: ColorUtil.getColor(pokeList[position].type[0]),
-                            borderRadius: BorderRadius.circular(30.0)
-                          ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Hero(
-                                  tag: pokeList[position].id,
-                                  child: Image.network(pokeList[position].image,height: 110.0,width: 110.0,),
-                                ),
-                                SizedBox(
-                                  height: 10.0,
-                                ),
-                                Text(pokeList[position].name.english),
-                              ],
-                            )
-                        ),
-                      );
-                    }),
-              ),
-            ],
-          )
         ),
       ),
     );
@@ -170,8 +191,8 @@ class _HomePageState extends State<HomePage> {
 }
 
 class PokemonSearch extends SearchDelegate {
-
-  Future<List<Pokemon>> getSearchPokemon(String query, BuildContext context) async{
+  Future<List<Pokemon>> getSearchPokemon(
+      String query, BuildContext context) async {
     PokemonService pokemonService = PokemonService();
     List<Pokemon> pokemon = await pokemonService.getSearchPokemon(query);
     return pokemon;
@@ -185,7 +206,7 @@ class PokemonSearch extends SearchDelegate {
           Icons.clear,
         ),
         color: Colors.black,
-        onPressed: (){
+        onPressed: () {
           query = "";
         },
       )
@@ -195,53 +216,53 @@ class PokemonSearch extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(
-        Icons.arrow_back
-      ),
+      icon: Icon(Icons.arrow_back),
       color: Colors.black,
-      onPressed: (){
+      onPressed: () {
         close(context, null);
       },
     );
   }
 
   @override
-  Widget buildResults(BuildContext context){
-
+  Widget buildResults(BuildContext context) {
     return FutureBuilder(
       future: getSearchPokemon(query, context),
-      builder: (context, pokemonsnapshot){
-        if(!pokemonsnapshot.hasData && pokemonsnapshot.connectionState == ConnectionState.waiting){
+      builder: (context, pokemonsnapshot) {
+        if (!pokemonsnapshot.hasData &&
+            pokemonsnapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: Image.asset('assets/loading.gif', height: 200,width: 200,),
+            child: Image.asset(
+              'assets/loading.gif',
+              height: 200,
+              width: 200,
+            ),
           );
-        }else if (!pokemonsnapshot.hasData && pokemonsnapshot.connectionState == ConnectionState.done) {
+        } else if (!pokemonsnapshot.hasData &&
+            pokemonsnapshot.connectionState == ConnectionState.done) {
           return Center(
             child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset('assets/pokedex.png'),
-                  Text(
-                    'Oops!',
-                    style: TextStyle(
-                      fontSize: 45.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Image.asset('assets/pokedex.png'),
+                Text(
+                  'Oops!',
+                  style: TextStyle(
+                    fontSize: 45.0,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: Text(
-                      "Pokedex couldn't find what you were looking for.",
-                      style: TextStyle(
-                        fontSize:16
-                      ),
-                    ),
-                  )
-                ],
-              )
-            ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Text(
+                    "Pokedex couldn't find what you were looking for.",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                )
+              ],
+            )),
           );
         } else {
           List<Pokemon> pokemons = pokemonsnapshot.data;
@@ -250,15 +271,14 @@ class PokemonSearch extends SearchDelegate {
             itemBuilder: (context, index) {
               return ListTile(
                 leading: Image.asset('assets/pokeball.png'),
-                title: Text(
-                    pokemons[index].name.english
-                ),
-                onTap: (){
-                  Navigator.pushReplacement(context, MaterialPageRoute(
-                      builder: (context){
-                       return DetailsPage(pokemon: pokemons[index],);
-                      }
-                  ));
+                title: Text(pokemons[index].name.english),
+                onTap: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
+                    return DetailsPage(
+                      pokemon: pokemons[index],
+                    );
+                  }));
                 },
               );
             },
@@ -273,5 +293,4 @@ class PokemonSearch extends SearchDelegate {
     // TODO: implement buildSuggestions with updated api
     return Container();
   }
-
 }

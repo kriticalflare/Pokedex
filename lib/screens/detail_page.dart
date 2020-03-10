@@ -62,75 +62,80 @@ class DetailsPage extends StatelessWidget {
                   padding: EdgeInsets.only(top: 90),
                   child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: Column(
-                      children: <Widget>[
-                        BarChart(
-                          BarChartData(
-                            alignment: BarChartAlignment.spaceBetween,
-                            maxY: 100,
-                            borderData: FlBorderData(
-                              show: false
-                            ),
-                            titlesData: FlTitlesData(
-                              show: true,
-                              bottomTitles: SideTitles(
-                                showTitles: true,
-                                textStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                                margin: 20,
-                                getTitles: (double value){
-                                  switch (value.toInt()) {
-                                    case 0:
-                                      return 'HP';
-                                    case 1:
-                                      return 'ATK';
-                                    case 2:
-                                      return 'DEF';
-                                    case 3:
-                                      return 'SP ATK';
-                                    case 4:
-                                      return 'SP DEF';
-                                    case 5:
-                                      return 'SPEED';
-                                    default:
-                                      return '';
-                                  }
-                                }
-                              ),
-                              leftTitles: const SideTitles(showTitles: false),
-                            ),
-                            barGroups: [
-                              BarChartGroupData(
-                              x: 0,
-                              barRods: [BarChartRodData(y: pokemon.base.hP.toDouble()/2 , color: pokeColour)],
-                              ),
-                              BarChartGroupData(
-                                  x: 1,
-                                  barRods: [BarChartRodData(y: pokemon.base.attack.toDouble()/2, color: pokeColour)],
-                              ),
-                              BarChartGroupData(
-                                x: 2,
-                                barRods: [BarChartRodData(y: pokemon.base.defense.toDouble()/2, color: pokeColour)],
-                              ),
-                              BarChartGroupData(
-                                x: 3,
-                                barRods: [BarChartRodData(y: pokemon.base.spAttack.toDouble()/2, color: pokeColour)],
-                              ),
-                              BarChartGroupData(
-                                x: 4,
-                                barRods: [BarChartRodData(y: pokemon.base.spDefense.toDouble()/2, color: pokeColour)],
-                              ),
-                              BarChartGroupData(
-                                x: 5,
-                                barRods: [BarChartRodData(y: pokemon.base.speed.toDouble()/2, color: pokeColour)],
-                              ),
-                            ]
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            width: double.infinity,
                           ),
-                        )
-                      ],
+                          BarChart(
+                            BarChartData(
+                              alignment: BarChartAlignment.spaceBetween,
+                              maxY: 100,
+                              borderData: FlBorderData(
+                                show: false
+                              ),
+                              titlesData: FlTitlesData(
+                                show: true,
+                                bottomTitles: SideTitles(
+                                  showTitles: true,
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                  margin: 20,
+                                  getTitles: (double value){
+                                    switch (value.toInt()) {
+                                      case 0:
+                                        return 'HP';
+                                      case 1:
+                                        return 'ATK';
+                                      case 2:
+                                        return 'DEF';
+                                      case 3:
+                                        return 'SP ATK';
+                                      case 4:
+                                        return 'SP DEF';
+                                      case 5:
+                                        return 'SPEED';
+                                      default:
+                                        return '';
+                                    }
+                                  }
+                                ),
+                                leftTitles: const SideTitles(showTitles: false),
+                              ),
+                              barGroups: [
+                                BarChartGroupData(
+                                x: 0,
+                                barRods: [BarChartRodData(y: pokemon.base.hP.toDouble()/2 , color: pokeColour)],
+                                ),
+                                BarChartGroupData(
+                                    x: 1,
+                                    barRods: [BarChartRodData(y: pokemon.base.attack.toDouble()/2, color: pokeColour)],
+                                ),
+                                BarChartGroupData(
+                                  x: 2,
+                                  barRods: [BarChartRodData(y: pokemon.base.defense.toDouble()/2, color: pokeColour)],
+                                ),
+                                BarChartGroupData(
+                                  x: 3,
+                                  barRods: [BarChartRodData(y: pokemon.base.spAttack.toDouble()/2, color: pokeColour)],
+                                ),
+                                BarChartGroupData(
+                                  x: 4,
+                                  barRods: [BarChartRodData(y: pokemon.base.spDefense.toDouble()/2, color: pokeColour)],
+                                ),
+                                BarChartGroupData(
+                                  x: 5,
+                                  barRods: [BarChartRodData(y: pokemon.base.speed.toDouble()/2, color: pokeColour)],
+                                ),
+                              ]
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   decoration: BoxDecoration(
