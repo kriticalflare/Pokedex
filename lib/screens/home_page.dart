@@ -148,36 +148,34 @@ class _HomePageState extends State<HomePage> {
                                     );
                                   }));
                                 },
-                                child: Expanded(
-                                  child: Container(
-                                      padding: EdgeInsets.all(15.0),
-                                      decoration: BoxDecoration(
-                                          color: ColorUtil.getColor(
-                                              pokeList[position].type[0]),
-                                          borderRadius:
-                                              BorderRadius.circular(30.0)),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Hero(
-                                            tag: pokeList[position].id,
-                                            child: Image.network(
-                                              pokeList[position].image,
-                                              height: 110.0,
-                                              width: 110.0,
-                                            ),
+                                child: Container(
+                                    padding: EdgeInsets.all(15.0),
+                                    decoration: BoxDecoration(
+                                        color: ColorUtil.getColor(
+                                            pokeList[position].type[0]),
+                                        borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Hero(
+                                          tag: pokeList[position].id,
+                                          child: Image.network(
+                                            pokeList[position].image,
+                                            height: 110.0,
+                                            width: 110.0,
                                           ),
-                                          SizedBox(
-                                            height: 10.0,
-                                          ),
-                                          Text(pokeList[position].name.english),
-                                        ],
-                                      )),
-                                ),
+                                        ),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        Text(pokeList[position].name.english),
+                                      ],
+                                    )),
                               );
                             }),
                       ),
