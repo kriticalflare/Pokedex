@@ -7,7 +7,6 @@ import 'package:poke_dex/utilities/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
-  static const id = 'homepage';
 
   @override
   _HomePageState createState() => _HomePageState();

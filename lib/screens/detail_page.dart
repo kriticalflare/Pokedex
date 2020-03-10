@@ -4,7 +4,6 @@ import 'package:poke_dex/utilities/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class DetailsPage extends StatelessWidget {
-  static final id = 'details';
   final Pokemon pokemon;
   DetailsPage({this.pokemon});
 
