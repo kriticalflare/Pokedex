@@ -14,7 +14,8 @@ jobs:
         java-version: '12.x'
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '1.9.1+hotfix.6'
+        flutter-version: '1.14.6'
+        channel: 'beta'
     - run: flutter pub get
     - run: flutter build apk --target-platform android-arm64 --release
     - uses: actions/upload-artifact@master
