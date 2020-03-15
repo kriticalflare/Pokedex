@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:poke_dex/models/pokemon.dart';
 import 'package:poke_dex/screens/detail_page.dart';
@@ -40,6 +39,53 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
 
     return null;
+  }
+
+  List<Widget> pokemonCards() {
+    List<Widget> pokeCardList = [];
+    for (Pokemon pokemon in pokeList){
+      var pokeCard =  GestureDetector(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) {
+                return DetailsPage(
+                  pokemon: pokemon,
+                );
+              }));
+        },
+        child: Container(
+          margin: EdgeInsets.all(15.0),
+            padding: EdgeInsets.all(15.0),
+            decoration: BoxDecoration(
+                color: ColorUtil.getColor(
+                    pokemon.type[0]),
+                borderRadius:
+                BorderRadius.circular(30.0)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment:
+              CrossAxisAlignment.center,
+              mainAxisAlignment:
+              MainAxisAlignment.center,
+              children: <Widget>[
+                Hero(
+                  tag: pokemon.id,
+                  child: Image.network(
+                    pokemon.image,
+                    height: 110.0,
+                    width: 110.0,
+                  ),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Text(pokemon.name.english),
+              ],
+            )),
+      );
+      pokeCardList.add(pokeCard);
+    }
+    return pokeCardList;
   }
 
   @override
@@ -109,78 +155,33 @@ class _HomePageState extends State<HomePage> {
                   ),
                 )
               : SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Flexible(
-                        child: Center(
-                          child: Text(
-                            'Pokemon of the day',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30.0,
-                            ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Flexible(
+                      child: Center(
+                        child: Text(
+                          'Pokemon of the day',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30.0,
                           ),
                         ),
                       ),
-                      RefreshIndicator(
-                        key: _refreshIndicatorKey,
-                        onRefresh: refreshList,
-                        child: GridView.builder(
-                            padding: EdgeInsets.all(10.0),
-                            shrinkWrap: true,
-                            itemCount: pokeList.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisSpacing: 10.0,
-                                    crossAxisSpacing: 10.0,
-                                    crossAxisCount: 2),
-                            itemBuilder: (context, position) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return DetailsPage(
-                                      pokemon: pokeList[position],
-                                    );
-                                  }));
-                                },
-                                child: Container(
-                                    padding: EdgeInsets.all(15.0),
-                                    decoration: BoxDecoration(
-                                        color: ColorUtil.getColor(
-                                            pokeList[position].type[0]),
-                                        borderRadius:
-                                            BorderRadius.circular(30.0)),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Hero(
-                                          tag: pokeList[position].id,
-                                          child: Image.network(
-                                            pokeList[position].image,
-                                            height: 110.0,
-                                            width: 110.0,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10.0,
-                                        ),
-                                        Text(pokeList[position].name.english),
-                                      ],
-                                    )),
-                              );
-                            }),
+                    ),
+                    RefreshIndicator(
+                      key: _refreshIndicatorKey,
+                      onRefresh: refreshList,
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        children: pokemonCards(),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ),
         ),
       ),
     );
